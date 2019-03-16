@@ -17,8 +17,8 @@ namespace A4
 
         public double Solve(long pointCount, long[][] points)
         {
-            //Write Your Code Here
-            return 0;
+            Graph myGraph = new Graph(pointCount, points);
+            return myGraph.CalculateMSTLenght();
         }
     }
 }
