@@ -17,8 +17,9 @@ namespace A4
 
         public double Solve(long pointCount, long[][] points, long clusterCount)
         {
-            //Write Your Code Here
-            return 0;
+            Graph myGraph = new Graph(pointCount, points);
+
+            return myGraph.ClusterDistance(clusterCount);
         }
     }
 }

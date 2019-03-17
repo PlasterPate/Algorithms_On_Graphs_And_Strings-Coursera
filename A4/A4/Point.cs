@@ -40,24 +40,26 @@ namespace A4
             SetDistances();
         }
 
+        public double FindDistance(int fromId, int toId)
+        {
+            double xDist = Math.Abs(Points[fromId].x - Points[toId].x);
+            double yDist = Math.Abs(Points[fromId].y - Points[toId].y);
+            double dist = Math.Sqrt(Math.Pow(xDist, 2) + Math.Pow(yDist, 2));
+            return dist;
+        }
+
         public void SetDistances()
         {
-            double xDist = 0;
-            double yDist = 0;
-            double dist = 0;
             foreach (var p in Points)
             {
                 for (int i = 0; i < Points.Count; i++)
                 {
-                    xDist = Math.Abs(Points[i].x - p.x);
-                    yDist = Math.Abs(Points[i].y - p.y);
-                    dist = Math.Sqrt(Math.Pow(xDist, 2) + Math.Pow(yDist, 2));
-                    p.distances[i] = dist;
+                    p.distances[i] = FindDistance(p.id, Points[i].id);
                 }
             }
         }
 
-        public double CalculateMSTLenght()
+        public void CalculateMSTLenght()
         {
             Points[0].cost = 0;
             Point minPoint = Points[0];
@@ -74,7 +76,13 @@ namespace A4
                 minPoint = Points.Where(p => !p.isChecked).OrderBy(p => p.cost).First();
                 minPoint.isChecked = true;
             }
-            return Math.Round(Points.Sum(p => p.cost), 6);
+            
+        }
+
+        public double ClusterDistance(long clusterCount)
+        {
+            CalculateMSTLenght();
+            return Math.Round(Points.OrderByDescending(p => p.cost).Skip((int)clusterCount - 2).First().cost, 6);
         }
     }
 }
