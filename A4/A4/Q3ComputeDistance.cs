@@ -9,7 +9,11 @@ namespace A4
 {
     public class Q3ComputeDistance : Processor
     {
-        public Q3ComputeDistance(string testDataName) : base(testDataName) { }
+        public Q3ComputeDistance(string testDataName) : base(testDataName)
+        {
+            this.ExcludeTestCaseRangeInclusive(0, 37);
+            this.ExcludeTestCaseRangeInclusive(39, 40);
+        }
 
         public override string Process(string inStr) =>
             TestTools.Process(inStr, (Func<long,long, long[][], long[][], long, long[][], long[]>)Solve);
@@ -22,8 +26,14 @@ namespace A4
                             long queriesCount,
                             long[][] queries)
         {
-            //Write Your Code Here
-            return new long[] { };
+            Graph myGraph = new Graph(nodeCount, points);
+            myGraph.BuildEdges(edgeCount, edges);
+            long[] results = new long[queriesCount];
+            for (int i = 0; i < queriesCount; i++)
+            {
+                results[i] = myGraph.AStar(queries[i][0], queries[i][1]);
+            }
+            return results;
         }
     }
 }

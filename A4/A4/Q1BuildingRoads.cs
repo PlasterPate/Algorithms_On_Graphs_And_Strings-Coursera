@@ -18,6 +18,7 @@ namespace A4
         public double Solve(long pointCount, long[][] points)
         {
             Graph myGraph = new Graph(pointCount, points);
+            myGraph.SetDistances();
             myGraph.CalculateMSTLenght();
             return Math.Round(myGraph.Points.Sum(p => p.cost), 6);
         }
