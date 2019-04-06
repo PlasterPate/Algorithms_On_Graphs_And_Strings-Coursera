@@ -33,7 +33,7 @@ namespace TestCommon
 
         public static string Process(string inStr, Func<string, string[]> solve)
         {
-            return string.Join("\n", solve(inStr.Trim(IgnoreChars)));
+            return string.Join("\n", solve(inStr));
         }
 
         public static string Process(string inStr, Func<string, long, string[], long[]> solve)
