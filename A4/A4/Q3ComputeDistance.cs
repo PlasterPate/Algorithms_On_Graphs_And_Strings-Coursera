@@ -11,8 +11,6 @@ namespace A4
     {
         public Q3ComputeDistance(string testDataName) : base(testDataName)
         {
-            this.ExcludeTestCaseRangeInclusive(0, 37);
-            this.ExcludeTestCaseRangeInclusive(39, 40);
         }
 
         public override string Process(string inStr) =>

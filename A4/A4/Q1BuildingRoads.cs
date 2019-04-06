@@ -20,7 +20,7 @@ namespace A4
             Graph myGraph = new Graph(pointCount, points);
             myGraph.SetDistances();
             myGraph.CalculateMSTLenght();
-            return Math.Round(myGraph.Points.Sum(p => p.cost), 6);
+            return Math.Round(myGraph.Points.Sum(p => p.Cost), 6);
         }
     }
 }

@@ -67,6 +67,8 @@ namespace A4
                 minIdx = RightChild(i);
             if (minIdx == int.MaxValue)
                 return;
+            if (Priority(minIdx) >= Priority(i))
+                return;
             Swap(i, minIdx);
             SiftDown(minIdx);
         }
@@ -74,7 +76,7 @@ namespace A4
         public void ChangePriority(int i, double newCost)
         {
             double oldPriority = Priority(i);
-            Points[i].cost = newCost;
+            Points[i].Cost = newCost;
             if (Priority(i) > oldPriority)
                 SiftDown(i);
             else
@@ -90,7 +92,7 @@ namespace A4
 
         public double Priority(int i)
         {
-            return Points[i].cost + Points[i].targetDist;
+            return Points[i].priority;
         }
     }
 }

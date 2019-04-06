@@ -11,21 +11,34 @@ namespace A4
         public int id;
         public long x;
         public long y;
-        public double cost;
+        private double cost;
         public bool isChecked;
         public double[] distances;
         public List<Edge> edges;
         public double targetDist;
+        public double priority;
+
+
+        public double Cost
+        {
+            get => cost;
+            set
+            {
+                cost = value;
+                priority = cost + targetDist;
+            }
+        }
 
         public Point(int id, long x, long y)
         {
             this.id = id;
             this.x = x;
             this.y = y;
-            cost = int.MaxValue;
+            Cost = int.MaxValue;
             isChecked = false;
             edges = new List<Edge>();
             targetDist = -1;
+            priority = Cost + targetDist;
         }
     }
 
@@ -72,7 +85,7 @@ namespace A4
 
         public void CalculateMSTLenght()
         {
-            Points[0].cost = 0;
+            Points[0].Cost = 0;
             Point minPoint = Points[0];
             minPoint.isChecked = true;
             for(int k = 0; k < Points.Count - 1; k++)
@@ -81,10 +94,10 @@ namespace A4
                 {
                     if(i != minPoint.id && !Points[i].isChecked)
                     {
-                        Points[i].cost = Math.Min(Points[i].cost, minPoint.distances[i]);
+                        Points[i].Cost = Math.Min(Points[i].Cost, minPoint.distances[i]);
                     }
                 }
-                minPoint = Points.Where(p => !p.isChecked).OrderBy(p => p.cost).First();
+                minPoint = Points.Where(p => !p.isChecked).OrderBy(p => p.Cost).First();
                 minPoint.isChecked = true;
             }
             
@@ -93,7 +106,7 @@ namespace A4
         public double ClusterDistance(long clusterCount)
         {
             CalculateMSTLenght();
-            return Math.Round(Points.OrderByDescending(p => p.cost).Skip((int)clusterCount - 2).First().cost, 6);
+            return Math.Round(Points.OrderByDescending(p => p.Cost).Skip((int)clusterCount - 2).First().Cost, 6);
         }
 
         public long AStar(long start, long target)
@@ -104,9 +117,9 @@ namespace A4
             foreach (var p in Points)
             {
                 if (p.id == start)
-                    p.cost = 0;
+                    p.Cost = 0;
                 else
-                    p.cost = int.MaxValue;
+                    p.Cost = int.MaxValue;
                 p.targetDist = FindDistance(p.id, (int)target);
                 pq.Add(p);
             }
@@ -118,18 +131,21 @@ namespace A4
                 processPoint = pq.ExtractMin();
                 if (processPoint == null)
                     return -1;
-                if (processPoint.cost == int.MaxValue)
+                if (processPoint.Cost == int.MaxValue)
                     return -1;
                 if (processPoint.id == target)
-                    return (long)Points[(int)target].cost;
+                    return (long)Points[(int)target].Cost;
                 foreach (var edge in processPoint.edges)
                 {
-                    if (Points[(int)edge.end].cost > processPoint.cost + edge.weight)
+                    if (Points[(int)edge.end].Cost > processPoint.Cost + edge.weight)
                     {
                         for (int i = 1; i < pq.Points.Length; i++)
                         {
                             if(pq.Points[i].id == (int)edge.end)
-                                pq.ChangePriority(i, processPoint.cost + edge.weight);
+                            {
+                                pq.ChangePriority(i, processPoint.Cost + edge.weight);
+                                break;
+                            }
                         }
                     }
                 }
