@@ -22,7 +22,6 @@ namespace A6
             for (int i = 0; i < n; i++)
             {
                 result[i] = BWT.MatchCount(text, patterns[i]);
-                Console.WriteLine(result[i]);
             }
             return result;
         }
