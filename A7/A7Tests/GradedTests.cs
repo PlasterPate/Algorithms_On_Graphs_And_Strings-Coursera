@@ -25,7 +25,7 @@ namespace A7.Tests
             RunTest(new Q2CunstructSuffixArray("TD2"));
         }
 
-        [TestMethod()]
+        [TestMethod(), Timeout(1000)]
         public void SolveTest_Q3()
         {
             RunTest(new Q2CunstructSuffixArray("TD2"));
