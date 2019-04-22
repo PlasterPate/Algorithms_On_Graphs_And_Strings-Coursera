@@ -19,7 +19,7 @@ namespace Exam1
 
         public string Solve(string cipher)
         {
-            var dict = File.ReadAllLines($"../../../dictionary.txt");
+            var dict = File.ReadAllLines($"../../../Exam1/dictionary.txt");
             Encryption encryptor;
             string key;
             string text = string.Empty;
