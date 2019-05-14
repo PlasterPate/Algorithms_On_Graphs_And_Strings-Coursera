@@ -20,7 +20,15 @@ namespace A8
 
         public virtual long Solve(long nodeCount, long edgeCount, long[][] edges)
         {
-            return 0;
+            Graph mygraph = new Graph((int)nodeCount, (int)edgeCount, edges);
+            while (true)
+            {
+                int[] path = mygraph.BFS(0, (int)nodeCount - 1).ToArray();
+                if (path.Length == 0)
+                    break;
+                mygraph.UpdateGrapgh(path);
+            }
+            return mygraph.MaxFlow;
         }
     }
 }
