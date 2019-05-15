@@ -425,7 +425,7 @@ namespace TestCommon
         public static string Process(
             string inStr, 
             Func<string, string, long[]> processor,
-            string outDelim = Space)
+            string outDelim = "\n")
         {
             var toks = inStr.Split(NewLineChars, StringSplitOptions.RemoveEmptyEntries);
             return string.Join(outDelim, processor(toks[0], toks[1]));
