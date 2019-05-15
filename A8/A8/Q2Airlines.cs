@@ -18,7 +18,8 @@ namespace A8
 
         public virtual long[] Solve(long flightCount, long crewCount, long[][] info)
         {
-            return new long[] { 0 }; 
+            Graph myGraph = new Graph(flightCount, crewCount, info);
+            return myGraph.AssignFlights((int)flightCount);
         }
 
   }

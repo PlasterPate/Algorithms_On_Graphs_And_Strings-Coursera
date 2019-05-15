@@ -8,19 +8,20 @@ namespace A8
 {
     public class Graph
     {
-        private List<Node> nodes;
+        private long[][] matrix;
         private long maxFlow;
+        private int[] prevs;
+        private bool[] isCheckeds;
 
         public Graph(int nodeCount, int edgeCount, long[][] edges)
         {
-            Nodes = new List<Node>();
-            for (int i = 0; i < nodeCount; i++)
+            Prevs = new int[nodeCount];
+            IsCheckeds = new bool[nodeCount];
+
+            Matrix = new long[nodeCount][];
+            for (int i = 0; i < Matrix.Length; i++)
             {
-                Nodes.Add(new Node());
-                for (int j = 0; j < nodeCount; j++)
-                {
-                    Nodes[i].Edges.Add(j, 0);
-                }
+                Matrix[i] = new long[nodeCount];
             }
 
             for (int i = 0; i < edgeCount; i++)
@@ -28,7 +29,36 @@ namespace A8
                 int u = (int)edges[i][0] - 1;
                 int v = (int)edges[i][1] - 1;
                 long w = (int)edges[i][2];
-                Nodes[u].Edges[v] += w;
+                Matrix[u][v] += w;
+            }
+        }
+
+        public Graph(long flightCount, long crewCount, long[][] info)
+        {
+            Prevs = new int[flightCount + crewCount + 2];
+            IsCheckeds = new bool[flightCount + crewCount + 2];
+
+            Matrix = new long[flightCount + crewCount + 2][];
+            for (int i = 0; i < Matrix.Length; i++)
+            {
+                Matrix[i] = new long[flightCount + crewCount + 2];
+            }
+
+            for (int i = 1; i < flightCount + 1; i++)
+            {
+                for (int j = (int)flightCount + 1; j < Matrix.Length - 1; j++)
+                {
+                    Matrix[i][j] = info[i - 1][j - ((int)flightCount + 1)];
+                }
+            }
+
+            for (int j = 0; j < flightCount + 1; j++)
+            {
+                Matrix[0][j] = 1;
+            }
+            for (int i = (int)flightCount + 1; i < Matrix.Length; i++)
+            {
+                Matrix[i][Matrix.Length - 1] = 1;
             }
         }
 
@@ -36,32 +66,31 @@ namespace A8
         {
             SetAllNodesFalse();
             Queue<int> queue = new Queue<int>();
-            Nodes[s].IsChecked = true;
+            IsCheckeds[s] = true;
             queue.Enqueue(s);
             while (queue.Any())
             {
                 int tempIdx = queue.Dequeue();
                 if (tempIdx == t)
                     break;
-                Node temp = Nodes[tempIdx];
-                for (int i = 0; i < temp.Edges.Count; i++)
+                for (int i = 0; i < Matrix.Length; i++)
                 {
-                    if(temp.Edges[i] > 0 && !Nodes[i].IsChecked)
+                    if(Matrix[tempIdx][i] > 0 && !IsCheckeds[i])
                     {
-                        Nodes[i].Prev = tempIdx;
-                        Nodes[i].IsChecked = true;
+                        Prevs[i] = tempIdx;
+                        IsCheckeds[i] = true;
                         queue.Enqueue(i);
                     }
                 }
             }
             List<int> result = new List<int>();
             int prev = t;
-            if (Nodes[prev].Prev == -1)
+            if (Prevs[prev] == -1)
                 return result;
             result.Add(prev);
             while(prev != s)
             {
-                prev = nodes[prev].Prev;
+                prev = Prevs[prev];
                 result.Add(prev);
             }
             result.Reverse();
@@ -73,28 +102,52 @@ namespace A8
             long minFlow = long.MaxValue;
             for (int i = 0; i < path.Length - 1; i++)
             {
-                long tempW = Nodes[path[i]].Edges[path[i + 1]];
+                long tempW = Matrix[path[i]][path[i + 1]];
                 if (tempW < minFlow)
                     minFlow = tempW;
             }
             for (int i = 0; i < path.Length - 1; i++)
             {
-                Nodes[path[i]].Edges[path[i + 1]] -= minFlow;
-                Nodes[path[i + 1]].Edges[path[i]] += minFlow;
+                Matrix[path[i]][path[i + 1]] -= minFlow;
+                Matrix[path[i + 1]][path[i]] += minFlow;
             }
             MaxFlow += minFlow;
         }
 
+        public long[] AssignFlights(int flightCount)
+        {
+            while (true)
+            {
+                int[] path = BFS(0, Matrix.Length - 1).ToArray();
+                if (path.Length == 0)
+                    break;
+                UpdateGrapgh(path);
+            }
+            long[] result = new long[flightCount];
+            result = Enumerable.Repeat((long)-1, flightCount).ToArray();
+            for (int i = flightCount; i < Matrix.Length - 1; i++)
+            {
+                for (int j = 1; j < flightCount + 1; j++)
+                {
+                    if (Matrix[i][j] == 1)
+                        result[j - 1] = i - flightCount;
+                }
+            }
+            return result;
+        }
+
         public void SetAllNodesFalse()
         {
-            for (int i = 0; i < Nodes.Count; i++)
+            for (int i = 0; i < Prevs.Length; i++)
             {
-                Nodes[i].IsChecked = false;
-                Nodes[i].Prev = -1;
+                IsCheckeds[i] = false;
+                Prevs[i] = -1;
             }
         }
-        public List<Node> Nodes { get => nodes; set => nodes = value; }
         public long MaxFlow { get => maxFlow; set => maxFlow = value; }
+        public long[][] Matrix { get => matrix; set => matrix = value; }
+        public int[] Prevs { get => prevs; set => prevs = value; }
+        public bool[] IsCheckeds { get => isCheckeds; set => isCheckeds = value; }
     }
 
     public class Node

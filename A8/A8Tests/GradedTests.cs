@@ -13,7 +13,7 @@ namespace A8.Tests
     [TestClass()]
     public class GradedTests
     {
-        [TestMethod()]
+        [TestMethod(), Timeout(2000)]
         public void SolveTest_Q1Evaquating()
         {
             RunTest(new Q1Evaquating("TD1"));
@@ -22,14 +22,12 @@ namespace A8.Tests
         [TestMethod(), Timeout(2000)]
         public void SolveTest_Q2Airlines()
         {
-            Assert.Inconclusive("A8.Q2 Not Solved");
             RunTest(new Q2Airlines("TD2"));
         }
 
         [TestMethod(), Timeout(2000)]
         public void SolveTest_Q3Stocks()
         {
-            Assert.Inconclusive("A8.Q3 Not Solved");
             RunTest(new Q3Stocks("TD3"));
         }
 
