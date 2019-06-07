@@ -82,7 +82,6 @@ namespace A3
                 }
             }
 
-
             List<string> result = new List<string>();
             result.Add($"{V * V} {resultTemp.Count}");
             result.AddRange(resultTemp);
