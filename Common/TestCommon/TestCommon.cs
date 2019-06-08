@@ -13,8 +13,6 @@ namespace TestCommon
         public static readonly char[] IgnoreChars = new char[] { '\n', '\r', ' ' };
         public static readonly char[] NewLineChars = new char[] { '\n', '\r' };
 
-<<<<<<< HEAD
-=======
         public static string Process(string inStr, Func<int, int?[,], string> solve)
         {
             var lines = inStr.Split(NewLineChars, StringSplitOptions.RemoveEmptyEntries);
@@ -87,7 +85,6 @@ namespace TestCommon
             return output;
         }
 
->>>>>>> origin/sauleh/TestCommon.Exam2
         public static string Process(string inStr, Func<long, long, long[][], long[], string[]> solve)
         {
             var lines = inStr.Split(NewLineChars, StringSplitOptions.RemoveEmptyEntries);
@@ -819,27 +816,6 @@ namespace TestCommon
             Debug.WriteLine($"Solution found: {bSat}");
             var bExpectedSat =
                 expected.Trim(TestTools.IgnoreChars) == "SATISFIABLE";
-<<<<<<< HEAD
-            Assert.AreEqual(bExpectedSat, bSat);
-        }
-
-    }
-
-    class AbortPolicy
-    {
-        private int msTimeout;
-        private Stopwatch sw;
-        public AbortPolicy(int msTimeout)
-        {
-            this.msTimeout = msTimeout;
-            sw = Stopwatch.StartNew();
-        }
-
-        public bool TimeOver() =>
-            sw.ElapsedMilliseconds > msTimeout;
-    }
-
-=======
 
             Assert.AreEqual(bExpectedSat, bSat);
         }
@@ -1018,6 +994,5 @@ namespace TestCommon
             sw.ElapsedMilliseconds > msTimeout;
     }
 
->>>>>>> origin/sauleh/TestCommon.Exam2
 
 }
