@@ -9,10 +9,10 @@ using TestCommon;
 
 namespace A12.Tests
 {
-    [TestClass(), Timeout(30000)]
+    [TestClass()]
     public class GradedTests
     {
-        [TestMethod()]
+        [TestMethod(), Timeout(30000)]
         [DeploymentItem("TestData", "A12_TestData")]
         public void SolveTest()
         {
